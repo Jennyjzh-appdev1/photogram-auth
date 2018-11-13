@@ -10,8 +10,10 @@
 #  updated_at :datetime         not null
 #
 
-FactoryBot.define do
-  factory :comment do
-    body "this is a comment"
-  end
+class Comment < ApplicationRecord
+    
+    validates :user_id, presence:true
+    validates :photo_id, presence:true
+    validates :body, presence:true
+    
 end
