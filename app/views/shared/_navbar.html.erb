@@ -1,5 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
   <div class="container">
+   
     <a class="navbar-brand" href="/">
       PhotogramAuth
     </a>
@@ -24,8 +25,12 @@
             <a href="/photos" class="dropdown-item">
               Photos
             </a>
+            <a href="/users" class="dropdown-item">
+              Users
+            </a>
           </div>
         </li>
+        
       </ul>
       
       <ul class="navbar-nav">
@@ -47,6 +52,12 @@
           <% else %>
           
               <li class="nav-item">
+                <a class="nav-link" href="/users/<%= current_user.id %>">
+                  My wall
+                </a>
+              </li>
+              
+              <li class="nav-item">
                 <a href="/users/edit" class="nav-link" >
                   <%= current_user.username %> 
                 </a>
@@ -61,33 +72,7 @@
           
         </ul>
         
-      <!--<ul class="navbar-nav">-->
-      <!--  <% if current_user.blank? %>-->
-      <!--    <li class="nav-item">-->
-      <!--      <a href="/users/sign_in" class="nav-link">-->
-      <!--        Sign in-->
-      <!--      </a>-->
-      <!--    </li>-->
-
-      <!--    <li class="nav-item">-->
-      <!--      <a href="/users/sign_up" class="nav-link">-->
-      <!--        Sign up-->
-      <!--      </a>-->
-      <!--    </li>-->
-      <!--  <% else %>-->
-      <!--    <li class="nav-item">-->
-      <!--      <a href="/users/edit" class="nav-link">-->
-      <!--        Edit profile-->
-      <!--      </a>-->
-      <!--    </li>-->
-
-      <!--    <li class="nav-item">-->
-      <!--      <a href="/users/sign_out" data-method="delete" class="nav-link">-->
-      <!--        Sign out-->
-      <!--      </a>-->
-      <!--    </li>-->
-      <!--  <% end %>-->
-      <!--</ul>-->
+      
     </div> <!-- .navbar-collapse -->
   </div> <!-- .container -->
 </nav>

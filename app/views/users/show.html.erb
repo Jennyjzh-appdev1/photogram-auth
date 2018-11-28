@@ -1,1 +1,111 @@
-individual user
+<body>    
+
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="jumbotron">
+          <h3>
+            <%= @user.username %>
+          </h3>
+        </div>
+      </div>
+    </div>
+    
+
+<% @userphotos.each do |photo| %>
+    
+    <div class="row mb-5">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                  <a href="/users/<%= photo.user_id %>"><%= User.where(id: photo.user_id).first.username %></a>
+                  <small>
+                    <%= time_ago_in_words(photo.created_at) %> ago
+                  </small>
+                </h4>
+            </div>
+
+            <div class="card-body">
+                <a href="/photos/<%= photo.id%>">
+                     <img src="<%= photo.image %>" class="img-fluid">
+                </a>
+                <%= photo.caption %>
+            </div>
+            
+            <form action="/create_like" method="post">
+              <!-- Hidden input for authenticity token to protect from forgery -->
+              
+              <input name="authenticity_token" type="hidden" value="wWRk6ZyHrYb+mHzvOt0jkZUqzr627sqDxsA6PI2LLI/AU3d7OdKjxkuLMPIMmPlWUP+zDJC+0ETKHnu4WByLMQ==">
+             
+                <input type="hidden" name="photo_id" value="<%= photo.id%>">
+
+                <input type="hidden" name="user_id" value="<%= current_user.id %>">
+
+                
+                <small>
+                  <% Like.where(photo_id: photo.id).each do |like| %>
+                    <%= User.where(id: like.user_id).first.username %>,
+                  <% end %>
+                  like this
+                </small>
+                
+              <button class="btn btn-link pull-right" type="submit">
+                <i class="far fa-heart"></i>
+                Like
+              </button>
+            </form>
+            
+            <div>
+              <% Comment.where(photo_id: photo.id).each do |comment| %>
+                <small>
+                <div>
+                  <a href="/users/<%=comment.user_id%>"><%= User.where(id: comment.user_id).first.username %></a>
+                  <%= time_ago_in_words(comment.created_at) %> ago 
+                
+                <div>
+                  <%= comment.body %>
+                </div>
+                </div>
+                </small>
+              <% end %>
+            </div>
+            
+          <p>
+          <form action="/create_comment" method="post" class="pt-4">
+                  <!-- Hidden input for authenticity token to protect from forgery -->
+                  <input name="authenticity_token" type="hidden" value="HtFYBK0U12Y4YWPXUWnyruxatB2bqIO5v82sH+4BtqSTEWAuByAuADPB7ahlxqfRQMHhBCh1aEdZd8INFwYsGg==">
+
+                  <input type="hidden" name="photo_id" value="<%= photo.id%>">
+
+                  <input type="hidden" name="user_id" value="<%= current_user.id %>">
+
+                  <!-- Label and input for body -->
+                  <div class="form-group">
+                    <label for="body" class="sr-only">
+                      Body
+                    </label>
+
+                    <div class="input-group">
+                      <input type="text" id="body" name="body" class="form-control" placeholder="Add a comment..." required>
+
+                      <span class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                          <i class="far fa-comment"></i>
+
+                          Add Comment
+                        </button>
+                      </span>
+                    </div> <!-- input-group -->
+                  </div>  <!-- form-group -->
+            </form>
+            </p>
+            
+            
+        </div>
+      </div>
+    </div>
+<% end %>
+
+
+
+</body>
