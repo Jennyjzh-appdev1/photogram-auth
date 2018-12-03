@@ -67,5 +67,6 @@ Rails.application.routes.draw do
   
   get("/users", {:controller => "users", :action => "index"})
   get("/users/:id_to_display", {:controller => "users", :action => "show"})
-
+  get("/my_likes", {:controller => "users", :action => "show_likes"})
+  
 end

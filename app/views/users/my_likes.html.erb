@@ -1,3 +1,5 @@
+my likes page
+
 <body>    
 
     <div class="row">
@@ -11,25 +13,26 @@
     </div>
     
 
-<% @userphotos.each do |photo| %>
+<% @userlikes.each do |like| %>
     
     <div class="row mb-5">
       <div class="col-md-8 offset-md-2">
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title">
-                  <a href="/users/<%= photo.user_id %>"><%= User.where(id: photo.user_id).first.username %></a>
+                  <% photo_originator = Photo.where(id: like.photo_id).first.user_id %>
+                  <a href="/users/<%= photo_originator %>"><%= User.where(id: photo_originator).first.username %></a>
                   <small>
-                    <%= time_ago_in_words(photo.created_at) %> ago
+                    <%= time_ago_in_words(Photo.where(id: like.photo_id).first.created_at) %> ago
                   </small>
                 </h4>
             </div>
 
             <div class="card-body">
-                <a href="/photos/<%= photo.id%>">
-                     <img src="<%= photo.image %>" class="img-fluid">
+                <a href="/photos/<%= like.photo_id %>">
+                     <img src="<%= Photo.where(id: like.photo_id).first.image %>" class="img-fluid">
                 </a>
-                <%= photo.caption %>
+                <%= Photo.where(id: like.photo_id).first.caption %>
             </div>
             
             <form action="/create_like" method="post">
@@ -37,36 +40,27 @@
               
               <input name="authenticity_token" type="hidden" value="wWRk6ZyHrYb+mHzvOt0jkZUqzr627sqDxsA6PI2LLI/AU3d7OdKjxkuLMPIMmPlWUP+zDJC+0ETKHnu4WByLMQ==">
              
-                <input type="hidden" name="photo_id" value="<%= photo.id%>">
+                <input type="hidden" name="photo_id" value="<%= like.photo_id%>">
 
                 <input type="hidden" name="user_id" value="<%= current_user.id %>">
 
-                
                 <small>
-                  <% Like.where(photo_id: photo.id).each do |like| %>
+                  <% Like.where(photo_id: like.photo_id).each do |like| %>
                     <%= User.where(id: like.user_id).first.username %>,
                   <% end %>
                   like this
                 </small>
-              
-              <% already_a_fav = Like.where(photo_id: photo.id, user_id: current_user.id).first %>
+                
 
-              <% if already_a_fav == nil %>
-                  <button class="btn btn-link pull-right" type="submit">
-                    <i class="far fa-heart"></i>
-                      Like
-                  </button>
-              <% else %>
-                  <a href="/delete_like/<%= Like.where(user_id: current_user.id, photo_id: photo.id).first.id %>" class="btn btn-link pull-right">
-                    <i class="fas fa-heart"></i> 
-                      Unlike
-                  </a>
-              <% end %>
-              
+                <a href="/delete_like/<%= like.id %>" class="btn btn-link pull-right">
+                  <i class="fas fa-heart"></i> 
+                  Unlike
+                </a>
+
             </form>
             
             <div>
-              <% Comment.where(photo_id: photo.id).each do |comment| %>
+              <% Comment.where(photo_id: like.photo_id).each do |comment| %>
                 <small>
                 <div>
                   <a href="/users/<%=comment.user_id%>"><%= User.where(id: comment.user_id).first.username %></a>
@@ -85,7 +79,7 @@
                   <!-- Hidden input for authenticity token to protect from forgery -->
                   <input name="authenticity_token" type="hidden" value="HtFYBK0U12Y4YWPXUWnyruxatB2bqIO5v82sH+4BtqSTEWAuByAuADPB7ahlxqfRQMHhBCh1aEdZd8INFwYsGg==">
 
-                  <input type="hidden" name="photo_id" value="<%= photo.id%>">
+                  <input type="hidden" name="photo_id" value="<%= like.photo_id %>">
 
                   <input type="hidden" name="user_id" value="<%= current_user.id %>">
 
